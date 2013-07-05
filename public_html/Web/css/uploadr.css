@@ -1,0 +1,447 @@
+* {
+	margin: 0;
+	padding: 0;
+} 
+
+body {
+	overflow: hidden;
+	height: 100%;	
+	background: #EBEBEB;
+	background-image: url('images/pw_maze_white.png');
+}	
+
+#maincontent {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+
+/*---------Outer Div Container---------*/
+
+
+section#fileform {
+	margin: 6em auto;
+	width: 46em;
+}
+
+section#fileform .inner {
+	padding: 0;
+	margin: 0;
+}
+
+section#fileform .innerchild {
+	width: 94.25%;
+	height: 15em;
+	margin: 0 auto;
+	border-left: 1px solid #888;
+	border-right: 1px solid #888;
+	border-bottom: 1px solid #888;
+	background: white;
+	overflow: auto;
+}
+
+
+
+
+/*---------Login Form---------*/
+
+
+
+
+form.login {
+	width: 100%;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+form.login fieldset {
+	border: 0;
+}
+
+form.login div {
+	width: 40%;
+	margin: 2em 0 0 0;
+	padding: 0 0 0 14em;
+}
+
+form.login label {
+	float: left;
+	padding: 0 1em 0 0;
+	font-size: 16px;
+	margin: 0.5em 0 0 0;
+	font-family: 'Telex';
+	color: #666;
+	text-align: right;
+	width: 5em;
+}
+
+.form login input {
+}	
+
+form.login input[type=text], form.login input[type=password] {
+	width: 10em;
+	font-family: 'Oxygen', sans-serif;
+	box-shadow: inset 0 1px 2px #888;
+	border: 1px solid #888;
+	font-size: 13px;
+	background: white;
+	padding: 0.2em 1em 0 1em;
+	height: 2.5em;
+}
+
+form.login input[type=submit]
+{
+	clear: both;
+	background: #F5F5F5;;
+	color: #666;
+	/*text-shadow: 0 -1px 0 #222;*/
+	font-size: 15px;
+	font-family: 'Telex', sans-serif;
+	border: 0;
+	height: 2.5em;
+	width: 8em;
+	margin: -1em 0 0 4.3em;
+}
+
+form.login input[type=submit]:hover {
+	background: #EDEDED;
+}
+
+form.login p.error {
+	width: 100%;
+	text-align: center;
+	padding: 1em 0 0 0;
+	margin: 0 0 -1em 0;
+	font-size: 14px;
+	font-style: italic;
+	font-family: 'Oxygen';
+	color: #888;
+}
+
+
+
+
+/*---------Listing Of Directory Contents---------*/
+
+
+
+
+div.files ul {
+	overflow: hidden;
+	border-bottom: 1px solid #888;
+	padding: 7px 0 7px 0;
+	clear: both;
+}
+
+div.files ul:hover {
+	background: #F5F5F5;
+}
+
+div.files ul:first-child {
+	border-top: 1px solid #888;
+}
+
+div.files ul:last-child {
+	border: 0;
+}
+
+div.files li {
+	float: left;
+	display: block;
+	font-family: 'Oxygen';
+	font-size: 15px;
+}
+
+div.files li a {
+	text-decoration: none;
+	color: black;
+	font-family: 'Telex', sans-serif;
+	font-size: 15px;
+}
+
+div.files li:first-child {
+	width: 42%;
+	padding: 0 0 0 2em;
+}
+
+div.files li:nth-child(2) {
+	width: 35%;
+}
+
+div.files li:nth-child(3) {
+	width: 6%;
+}
+
+div.files li:nth-child(4) {
+	width: 6%;
+}
+
+div.files li:nth-child(3) a:hover {
+	color: #66CD00;
+	text-shadow: 0 -1px 0 #008B00;
+}
+
+div.files li:nth-child(4) a:hover {
+	color: #CD0000;
+	text-shadow: 0 -1px 0 #8B0000;
+}
+	
+
+
+
+/*---------Upload and Select File Form---------*/
+
+
+
+.form {
+	width: 50%;
+	float: left;
+	margin: 0 0 0 0;
+}
+
+.form fieldset {
+	border: 0;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	padding: 0.75em 0 0 0;
+}
+
+.form input {
+	height: 2.5em;
+	width: 8em;
+}
+
+.form input[type=file] {
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
+
+.form input[type=button] {
+	font-family: 'Oxygen';
+	background: white;
+}
+
+.form input[type=submit] {
+	
+}
+
+.form div {
+	float: left;
+	width: 35%;
+}
+
+.form div#selectfile {
+	padding: 0 0 0 2em;
+}
+
+.form div#submitfile {
+	padding: 0 0 0 4em;
+}
+
+.form input[type=button], input[type=submit] {
+	border: 0;
+}
+
+
+
+/*---------Name and Create Directory Form---------*/
+
+
+
+
+.createdir {
+	width: 50%;
+	float: left;
+	margin: 0 0 0 0;
+}
+
+.createdir fieldset {
+	border: 0;
+	position: relative;
+	width: 100%;
+	padding: 0.75em 0 0 0;
+}
+
+.createdir input {
+	height: 2.5em;
+	width: 8em;
+}
+
+.createdir input[type=text] {
+	width: 8em;
+	font-family: 'Oxygen', sans-serif;
+	box-shadow: inset 0 1px 2px #888;
+	border: 1px solid #888;
+	font-size: 13px;
+	background: white;
+	padding: 0.2em 1em 0 1em;
+}
+
+.createdir div {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+.createdir div#seccreatedir {
+	padding: 0 0 0 0;
+	margin: 0 0 0 -4px;
+}
+
+.createdir div#typedir {
+	padding: 0.2em 0 0 4em;
+}
+
+.createdir input[type=submit] {
+	
+}
+
+
+
+
+/*---------Error Container---------*/
+
+
+
+
+div#error-container {
+	width: 100%;
+	overflow: hidden;
+	margin: 0 0 -1em 0;
+}
+
+div#error-container p.error {
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+	font-style: italic;
+	font-size: 14px;
+	padding: 0.5em 0 0 0;
+	font-family: 'Oxygen';
+}
+
+
+
+
+/*---------Section Footer---------*/
+
+
+
+
+footer.footer {
+	width: 100%;
+	clear: both;
+	overflow: hidden;
+	text-align: center;
+	height: 2em;
+	position: absolute;
+	margin: -6em 0 0 0;
+}
+
+footer.footer span {
+	text-align: center;
+	font-size: 10px;
+	color: #999;
+	margin: 0 auto;
+	font-family: 'Telex';
+}
+
+footer.footer span a {
+	text-decoration: none;
+	color: #999;
+}
+
+
+
+
+/*---------Misc---------*/
+
+
+
+
+.form input[type=button]:hover, .form input[type=submit]:hover, .createdir input[type=submit]:hover {
+	background: #EDEDED;
+}
+
+.form input[type=button], .form input[type=submit], .createdir input[type=submit] {
+	background: #F5F5F5;;
+	color: #666;
+	/*text-shadow: 0 -1px 0 #222;*/
+	font-size: 15px;
+	font-family: 'Telex', sans-serif;
+}
+
+div.parentdir {
+	width: 100%;
+	overflow:hidden;
+	margin: 1em 0 0.5em 0;
+	padding: 0.5em 0 0 0;
+}
+
+div.parentdir a {
+	padding: 0 0 0 1em;
+	color: #666;
+	font-family: 'Telex';
+	clear: both;
+	text-decoration: none;
+	font-size: 15px;
+}
+
+
+
+
+/*---------Ribbon Design---------*/
+
+
+
+
+.ribbon {
+	font-size: 20px !important;
+	font-family: 'Oxygen';
+	width: 100%;	
+	box-shadow: 0 8px 6px -6px black;
+   	-moz-box-shadow: 0 8px 6px -6px black;
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	position: relative;
+	background: #87c8fd; /* Old browsers */
+	background: -moz-linear-gradient(top, #87c8fd 0%, #53adf1 40%, #057ee1 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87c8fd), color-stop(40%,#53adf1), color-stop(100%,#057ee1)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #87c8fd 0%,#53adf1 40%,#057ee1 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #87c8fd 0%,#53adf1 40%,#057ee1 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #87c8fd 0%,#53adf1 40%,#057ee1 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #87c8fd 0%,#53adf1 40%,#057ee1 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87c8fd', endColorstr='#057ee1',GradientType=0 ); /* IE6-9 */
+	color: #fff;
+	text-align: center;
+	padding: 0.7em 0 0.5em 0; /* Adjust to suit */
+}
+
+.ribbon strong {
+	text-shadow: 0 -1px 0 #025192;/*#0373cf;*/
+}
+
+.ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
+	content: "";
+	position: absolute;
+	display: block;
+	border-style: solid;
+	border-color: #024276/*#012949*/ transparent transparent transparent;
+	bottom: -1em;
+}
+.ribbon .ribbon-content:before {
+	left: 0;
+	border-width: 1em 0 0 1em;
+}
+.ribbon .ribbon-content:after {
+	right: 0;
+	border-width: 1em 1em 0 0;
+}
+
+.non-semantic-protector { position: relative; z-index: 1; }
+
+
