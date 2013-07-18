@@ -6,7 +6,7 @@
 				</h1>
 				</div>
 				<div class="innerchild">
-					<form class="login" action="index.php?route=Auth/auth" method="POST">
+					<form class="login" action="index.php?route=auth/auth" method="POST">
 					<fieldset>
 						<legend></legend>
 						<?php
