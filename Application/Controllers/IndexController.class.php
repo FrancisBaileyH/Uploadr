@@ -28,7 +28,6 @@ class IndexController extends Controller\BaseController
 	
 	public function index()
 	{
-				
 		if (self::validateForm()) 
 		{ 
 			if (!self::upload())
@@ -40,14 +39,13 @@ class IndexController extends Controller\BaseController
 		{ 
 			header('location: index.php'); 
 		}
-
 		$files = self::fetchFiles();
 		
 		$this->template->files   = empty($files) ? '' : $files;
 		$this->template->dir     = empty($_GET['dir']) ? '' : $_GET['dir'];
 		$this->template->prevdir = !empty($_GET['dir']) ? dirname($_GET['dir']) : '';
 		$this->template->errors  = $this->errors;
-				
+						
 		$this->template->render(['header', 'uploadr', 'footer']);
 	}
 
@@ -64,27 +62,31 @@ class IndexController extends Controller\BaseController
 	{
 		if (isset($_POST['submit']))
 		{
-			if (empty($_FILES['file']['name']))
+			if (empty($_FILES['files']['name']))
 			{
 				$errors['m_field'] = "Please Select A File";
 			}
 			else
 			{
 				$dir = self::sanitizeGetDir();
-				$file_parts = pathinfo($_FILES['file']['name']);
-	
-		
-				if (file_exists($dir.$_FILES['file']['name']))
+				$count = count($_FILES['files']['name']);
+					
+				for ($i = 0; $i < $count; $i++)
 				{
-					$errors['f_exists'] = "File Exists In Directory";
-				}
-				if (empty($file_parts['extension']) || !in_array(strtolower($file_parts['extension']), $this->registry->config['file_extension_whitelist']))
-				{
-					$errors['f_ext'] = "Extension Not Supported";
-				}
-				if ($_FILES['file']['size'] > $this->registry->config['max_file_size'])
-				{
-					$errors['f_size'] = "Max File Size Exceeded";
+					$file_parts = pathinfo($_FILES['files']['name'][$i]);					
+							
+					if (file_exists($dir.$_FILES['files']['name'][$i]))
+					{
+						$errors['f_exists'][$i] = "The File: ".$file_parts['basename']. "Exists In Directory";
+					}
+					if (empty($file_parts['extension'][$i]) || !in_array(strtolower($file_parts['extension']), $this->registry->config['file_extension_whitelist']))
+					{
+						$errors['f_ext'][$i] = "Extension Not Supported on: ".$file_parts['basename'];
+					}
+					if ($_FILES['files']['size'][$i] > $this->registry->config['max_file_size'])
+					{
+						$errors['f_size'][$i] = "Max File Size Exceeded on: ".$file_parts['basename'];
+					}
 				}
 			}
 
@@ -105,18 +107,26 @@ class IndexController extends Controller\BaseController
 	private function upload()
 	{
 		$dir = self::sanitizeGetDir();
-	
-		$uploadfile = $dir.basename(preg_replace("/[^a-zA-Z0-9s.]/", "_", $_FILES['file']['name']));
+		$count = count($_FILES['files']['name']);
+		$i = 0;
+
 		
-						
-		if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
-		{
-			$return = false;
+		do
+		{	
+			$uploadfile = $dir.basename(preg_replace("/[^a-zA-Z0-9s.]/", "_", $_FILES['files']['name'][$i]));
+							
+			if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $uploadfile))
+			{
+				$return = false;
+			}
+			else
+			{
+				$i++;
+				$return = true;
+			}
 		}
-		else
-		{
-			$return = true;
-		}
+
+		while ($i < $count && $return != false);
 
 		unset($_FILES);
 		
@@ -144,7 +154,7 @@ class IndexController extends Controller\BaseController
 					$type = 'file';
 				}
 				
-				$displayname = self::appendFileName($name);
+				$displayname = self::appendFileName($name, 33);
 				$size = self::bytesToSize(filesize($file));
 							
 				$this->files[$name] = [ 'name' => htmlentities($name), 'displayname' => $displayname, 'size' => $size, 'mod' => filemtime($file), 'type' => $type ];
@@ -295,13 +305,13 @@ class IndexController extends Controller\BaseController
 
 	
 		
-	private function appendFileName($filename)
+	private function appendFileName($filename, $strlen = 30)
 	{
 		if (is_string($filename))
 		{
-			if (strlen($filename) > 33)
+			if (strlen($filename) > $strlen)
 			{
-				$string = substr($filename, 0, 30);
+				$string = substr($filename, 0, $strlen);
 				$appendedFileName = $string.'...';
 				return $appendedFileName;
 			}
