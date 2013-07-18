@@ -28,8 +28,7 @@ class IndexController extends Controller\BaseController
 	
 	public function index()
 	{
-		$files = self::fetchFiles();
-		
+				
 		if (self::validateForm()) 
 		{ 
 			if (!self::upload())
@@ -41,6 +40,8 @@ class IndexController extends Controller\BaseController
 		{ 
 			header('location: index.php'); 
 		}
+
+		$files = self::fetchFiles();
 		
 		$this->template->files   = empty($files) ? '' : $files;
 		$this->template->dir     = empty($_GET['dir']) ? '' : $_GET['dir'];
