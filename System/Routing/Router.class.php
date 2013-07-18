@@ -16,6 +16,7 @@ class Router
 
 
 
+	private $filter = [ 'index', 'auth'];
 	private $registry;
 	private $args = array();
 	public  $action;
@@ -73,7 +74,7 @@ class Router
 		{
 			$parts = explode('/', $route);
 					
-			if (empty($parts[0]))
+			if (empty($parts[0]) || !in_array($parts[0], $this->filter))
 			{
 				$this->controller = 'Application\Controllers\Index';
 				$this->action = 'notFound';
@@ -94,13 +95,13 @@ class Router
 				}
 			}
 		}
-		elseif (empty($_SESSION['AUTH']))
-		{
-			$this->controller = 'Application\Controllers\Auth';
-		}
 		else
 		{
 			$this->controller = 'Application\Controllers\Index';
+		}
+		if (empty($_SESSION['AUTH']))
+		{
+			$this->controller = 'Application\Controllers\Auth';
 		}
 		
 	   	return $this->controller.'Controller.class.php';
