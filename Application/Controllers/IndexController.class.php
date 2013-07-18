@@ -79,7 +79,7 @@ class IndexController extends Controller\BaseController
 					{
 						$errors['f_exists'][$i] = "The File: ".$file_parts['basename']. "Exists In Directory";
 					}
-					if (empty($file_parts['extension'][$i]) || !in_array(strtolower($file_parts['extension']), $this->registry->config['file_extension_whitelist']))
+					if (empty($file_parts['extension']) || !in_array(strtolower($file_parts['extension']), $this->registry->config['file_extension_whitelist']))
 					{
 						$errors['f_ext'][$i] = "Extension Not Supported on: ".$file_parts['basename'];
 					}
