@@ -11,7 +11,7 @@
 				<fieldset>
 					<legend></legend>					
 					<div id="selectfile">
-						<input type="button" onclick="getFile()" name="filebutton" value="Select File" /><input id="file" type="file" name="file" />
+						<input type="button" onclick="getFile()" name="filebutton" value="Select File" /><input onchange="alertFile()" id="file" type="file" name="files[]" multiple />
 					</div>
 					<div id="submitfile">
 						<input type="submit" value="Upload File" name="submit" />
@@ -32,14 +32,16 @@
 				</fieldset>
 				</form>
 				</div>
-				<div id="error-container">
+				<div class="msg-containter" id="uploads"></div>
+				<div class="msg-container">
 				<?php
 					if (!empty($errors))
 					{
-						foreach($errors as $error)
+						/*foreach($errors as $error)
 						{
 							echo '<p class="error">'.$error.'</p>';
-						}
+						}*/
+						print_r($errors);
 					}
 				?>
 				</div>
