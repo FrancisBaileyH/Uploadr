@@ -12,14 +12,19 @@
 		<script type="text/javascript">
 		
 	
-		function getFile()
+		function selectFile()
 		{
 			document.getElementById("file").click();
-
-			var file = document.getElementById("file").value;
-							
-			document.getElementById("uploads").innerHTML = file+" selected";
 		}
+
+		
+		function alertFile()
+		{
+			var file = document.getElementById("file").value;
+
+			document.getElementById("uploads").innerHTML = file + " selected";
+		}
+		
 		
 		</script>
 		<div id="maincontent">
