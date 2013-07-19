@@ -62,7 +62,7 @@ class IndexController extends Controller\BaseController
 	{
 		if (isset($_POST['submit']))
 		{
-			if (empty($_FILES['files']['name']))
+			if (empty($_FILES['files']['name'][0]))
 			{
 				$errors['m_field'] = "Please Select A File";
 			}
