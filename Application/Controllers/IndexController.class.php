@@ -153,10 +153,9 @@ class IndexController extends Controller\BaseController
 			{
 				if (is_dir($file))
 				{
-					$name = str_replace(__UPLOAD_DIR, '', $file); 
-					$displayName = basename($name);
+					$name = str_replace(__UPLOAD_DIR, '', $file);
 					$displayName = self::appendFileName($name, 60);
-					$this->dirsArray[$name] = [ 'name' => htmlentities($name), 'displayName' => $displayName ];
+					$this->dirsArray[$name] = [ 'name' => htmlentities($name), 'displayName' => basename($displayName) ];
 				}
 				else
 				{
