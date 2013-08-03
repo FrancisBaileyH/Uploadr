@@ -20,7 +20,8 @@ class IndexController extends Controller\BaseController
 
 	
 	private $errors = array();
-	private $files = array();
+	private $filesArray = array();
+	private $dirsArray = array();
 	private $dir = null;		
 
 
@@ -32,19 +33,20 @@ class IndexController extends Controller\BaseController
 		{ 
 			if (!self::upload())
 			{
-				$this->errors['upload_fail'] = 1;
+				$this->errors['upload_fail'] = "Error: Unable To Upload File At This Time";
 			}
 		}
 		if (!empty($_GET['dir']) && $_GET['dir'] == '.') 
 		{ 
 			header('location: index.php'); 
 		}
-		$files = self::fetchFiles();
+		self::fetchFiles();
 		
-		$this->template->files   = empty($files) ? '' : $files;
-		$this->template->dir     = empty($_GET['dir']) ? '' : $_GET['dir'];
-		$this->template->prevdir = !empty($_GET['dir']) ? dirname($_GET['dir']) : '';
-		$this->template->errors  = $this->errors;
+		$this->template->dirsArray  = $this->dirsArray;		
+		$this->template->filesArray =  $this->filesArray;
+		$this->template->uriDir     = empty($_GET['dir']) ? '' : $_GET['dir'];
+		$this->template->prevdir    = !empty($_GET['dir']) ? dirname($_GET['dir']) : '';
+		$this->template->errors     = $this->errors;
 						
 		$this->template->render(['header', 'uploadr', 'footer']);
 	}
@@ -58,6 +60,9 @@ class IndexController extends Controller\BaseController
 
 	
 
+	/*
+		Check for MAX POST SIZE, max file size combined
+	*/
 	private function validateForm()
 	{
 		if (isset($_POST['submit']))
@@ -77,15 +82,15 @@ class IndexController extends Controller\BaseController
 							
 					if (file_exists($dir.$_FILES['files']['name'][$i]))
 					{
-						$errors['f_exists'][$i] = "The File: ".$file_parts['basename']. "Exists In Directory";
+						$errors['f_exists'.$i] = "The File: ".$file_parts['basename']. " Exists In Directory";
 					}
 					if (empty($file_parts['extension']) || !in_array(strtolower($file_parts['extension']), $this->registry->config['file_extension_whitelist']))
 					{
-						$errors['f_ext'][$i] = "Extension Not Supported on: ".$file_parts['basename'];
+						$errors['f_ext'.$i] = "Extension Not Supported on: ".$file_parts['basename'];
 					}
 					if ($_FILES['files']['size'][$i] > $this->registry->config['max_file_size'])
 					{
-						$errors['f_size'][$i] = "Max File Size Exceeded on: ".$file_parts['basename'];
+						$errors['f_size'.$i] = "Max File Size Exceeded on: ".$file_parts['basename'];
 					}
 				}
 			}
@@ -108,33 +113,36 @@ class IndexController extends Controller\BaseController
 	{
 		$dir = self::sanitizeGetDir();
 		$count = count($_FILES['files']['name']);
+		$returnFlag = false;
 		$i = 0;
-
+		
 		
 		do
-		{	
-			$uploadfile = $dir.basename(preg_replace("/[^a-zA-Z0-9s.]/", "_", $_FILES['files']['name'][$i]));
+		{
+			$uploadfile = $dir.basename(/*preg_replace("/[^a-zA-Z0-9s.]/", " ",*/ $_FILES['files']['name'][$i]);
 							
 			if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $uploadfile))
 			{
-				$return = false;
+				return false;
 			}
 			else
 			{
+				$returnFlag = true;
 				$i++;
-				$return = true;
 			}
 		}
 
-		while ($i < $count && $return != false);
+		while ($i < $count && $returnFlag != false);
 
 		unset($_FILES);
+
+		return true;
 		
-		return $return;
 	}
 
 
 
+				
 	private function fetchFiles()
 	{
 		$dir = self::sanitizeGetDir();	
@@ -146,27 +154,23 @@ class IndexController extends Controller\BaseController
 				if (is_dir($file))
 				{
 					$name = str_replace(__UPLOAD_DIR, '', $file); 
-					$type = 'dir';
+					$displayName = basename($name);
+					$displayName = self::appendFileName($name, 60);
+					$this->dirsArray[$name] = [ 'name' => htmlentities($name), 'displayName' => $displayName ];
 				}
 				else
 				{
 					$name = basename($file);
-					$type = 'file';
+					$size = self::bytesToSize(filesize($file));
+					$displayName = self::appendFileName($name, 25);
+					$this->filesArray[$name] = [ 'name' => htmlentities($name), 'displayName' => $displayName, 'size' => $size, 'mod' => filemtime($file) ];
 				}
-				
-				$displayname = self::appendFileName($name, 33);
-				$size = self::bytesToSize(filesize($file));
-							
-				$this->files[$name] = [ 'name' => htmlentities($name), 'displayname' => $displayname, 'size' => $size, 'mod' => filemtime($file), 'type' => $type ];
+														
 			}
 	
-			if (empty($this->files))
+			if (empty($this->filesArray) || empty($this->dirsArray))
 			{
 				$this->msg['FETCH'] = "No Files In Directory";
-			}
-			else
-			{
-				return $this->files;
 			}
 		}
 		else
@@ -178,6 +182,7 @@ class IndexController extends Controller\BaseController
 			$this->errors = $errors;
 		}
 	}
+
 
 
 	
