@@ -7,7 +7,7 @@
 				</div>
 				<div class="innerchild">
 				<div class="form">
-				<form action="index.php?dir=<?= $dir; ?>" method="POST" enctype="multipart/form-data" id="uploadfile">
+				<form action="index.php?dir=<?= $uriDir; ?>" method="POST" enctype="multipart/form-data" id="uploadfile">
 				<fieldset>
 					<legend></legend>					
 					<div id="selectfile">
@@ -20,7 +20,7 @@
 				</form>
 				</div>
 				<div class="createdir">
-				<form action="index.php?route=index/createDir&amp;dir=<?= $dir; ?>" method="POST" id="createdir">
+				<form action="index.php?route=index/createDir&amp;dir=<?= $uriDir; ?>" method="POST" id="createdir">
 				<fieldset>
 					<legend></legend>
 					<div id="typedir">
@@ -37,31 +37,31 @@
 				<?php
 					if (!empty($errors))
 					{
-						/*foreach($errors as $error)
+						foreach($errors as $error)
 						{
 							echo '<p class="error">'.$error.'</p>';
-						}*/
-						print_r($errors);
+						}
+						//print_r($errors);
 					}
 				?>
 				</div>
 				<div class="parentdir"><?= (!empty($prevdir) ? '<a href="index.php?dir='.$prevdir.'">Parent Directory</a>' : '&nbsp;'); ?></div>
 				<div class="files"><?php
-								if (!empty($files))
+								if (!empty($dirsArray))
 								{
-								
-									foreach($files as $file)
+									foreach ($dirsArray as $dirArray)
 									{
-										if ($file['type'] == 'dir')
-										{
-											echo '<ul><li><a href="index.php?dir='.$file['name'].'">'.basename($file['name']).'</a></li><li></li><li>&nbsp;</li><li><a href="index.php?route=index/deleteDir&amp;dir='.$file['name'].'"></a></li></ul>';
-										}
-										else
-										{
-											echo    '<ul><li>'.$file['displayname'].'</li><li>'.$file['size'].'</li>'.
-												'<li><a href="index.php?route=index/download&amp;dir='.$dir.'&amp;file='.urlencode($file['name']).'">D</a></li>'.
-												'<li><a href="index.php?route=index/delete&amp;dir='.$dir.'&amp;file='.urlencode($file['name']).'">X</a><li></ul>';
-										}							
+										echo '<ul><li><a href="index.php?dir='.$dirArray['name'].'">'.$dirArray['displayName'].'</a></li><li></li><li>&nbsp;</li><li><a href="index.php?route=index/deleteDir&amp;dir='.$dirArray['name'].'"></a></li></ul>';
+									}
+								}
+								if (!empty($filesArray))
+								{
+									foreach($filesArray as $fileArray)
+									{
+										echo    '<ul><li title="'.$fileArray['name'].'">'.$fileArray['displayName'].'</li><li>'.$fileArray['size'].'</li>'.
+											'<li><a href="index.php?route=index/download&amp;dir='.$uriDir.'&amp;file='.urlencode($fileArray['name']).'">D</a></li>'.
+											'<li><a href="index.php?route=index/delete&amp;dir='.$uriDir.'&amp;file='.urlencode($fileArray['name']).'">X</a><li></ul>';
+																	
 									}
 								}
 							?>
