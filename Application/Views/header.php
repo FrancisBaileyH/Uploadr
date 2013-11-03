@@ -7,25 +7,12 @@
 		<link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css' />
 		<link href='http://fonts.googleapis.com/css?family=Telex' rel='stylesheet' type='text/css' />
 		<meta charset="UTF-8">
-		</head>
+			
+	</head>
 	<body>
+		<script src="Web/js/jquery.js"></script>
 		<script type="text/javascript">
-		
-	
-		function selectFile()
-		{
-			document.getElementById("file").click();
-		}
-
-		
-		function alertFile()
-		{
-			var file = document.getElementById("file").value;
-
-			document.getElementById("uploads").innerHTML = file + " selected";
-		}
-		
-		
 		</script>
+		<script src="/Web/js/uploadr.js"></script>
 		<div id="maincontent">
 

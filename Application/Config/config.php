@@ -14,30 +14,10 @@ $config = array();
 
 
 
-
-/*
-	A whitelist of allowable file extensions to prevent
-	Unwanted files from being uploaded
-*/
-$config['file_extension_whitelist'] = [
-					'jpg', 'jpeg', 'mp4', 'mp3', 'gif', 'png', 'avi', 'txt', 'php', 'html', 'css',
-				        'zip', 'tar', 'bz2', 'pdf'
-				      ];
-
-
-
-/*
-	The root dir for file uploads
-*/
-$config['root_upload_dir'] = '/Uploads/';
-
-
-
-
 /*
 	Directory all files are to be uploaded to
 */
-$config['upload_dir'] = __DOC_ROOT.'/Uploads/';
+$config['upload_dir'] = 'Uploads/';
 
 
 
@@ -45,7 +25,23 @@ $config['upload_dir'] = __DOC_ROOT.'/Uploads/';
 /*
 	Maximum file size allowed
 */
-$config['max_file_size'] = 524288000;
+$config['max_file_size'] = 209715200;//ini_get('upload_max_file_size');
+
+
+
+/*
+ *   Maximum size allowed
+*/
+$config['max_post_size'] =  ini_get('upload_max_post_size') - 1;
+
+
+
+ 
+/*
+ * Maximum files to be uploaded @ a time
+ * Should correspond with your php.ini
+*/
+$config['max_num_files'] = 10;
 
 
 

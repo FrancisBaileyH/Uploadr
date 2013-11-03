@@ -96,9 +96,8 @@ form.login input[type=text], form.login input[type=password] {
 form.login input[type=submit]
 {
 	clear: both;
-	background: #F5F5F5;;
+	background: #F5F5F5;
 	color: #666;
-	/*text-shadow: 0 -1px 0 #222;*/
 	font-size: 15px;
 	font-family: 'Telex', sans-serif;
 	border: 0;
@@ -213,7 +212,7 @@ div.files li:nth-child(4) a:hover {
 
 .form input {
 	height: 2.5em;
-	width: 8em;
+	width: 7.91em;
 }
 
 .form input[type=file] {
@@ -305,25 +304,45 @@ div.files li:nth-child(4) a:hover {
 
 
 
-/*---------Error Container---------*/
+/*---------Msg Container---------*/
 
 
 
 
-div#error-container {
-	width: 100%;
+div.msg-container {
+	width: 98%;
 	overflow: hidden;
-	margin: 0 0 -1em 0;
-}
-
-div#error-container p.error {
-	width: 100%;
-	margin: 0 auto;
-	text-align: center;
-	font-style: italic;
 	font-size: 14px;
 	padding: 0.5em 0 0 0;
 	font-family: 'Oxygen';
+}
+
+div.msg-container p.error {
+	text-align: center;
+	font-style: italic;
+}
+
+div.msg-container div.fileSelect {
+	margin: 0.2em 0 0 2em;
+}
+
+div.msg-container div.progress {
+	width: 100%;
+	background: white;
+	margin: 0.2em 0 0 1em ;
+}
+
+div.msg-container div.progressBar { 
+	width: 0;
+	margin: 0 1em 0 1.2em;
+	height: 3px;
+	background: #EDEDED;
+}
+
+div.msg-container p.uploadError {
+	font-size: 12px;
+	color: #666;
+	margin: -0.2em 0 0 2em;
 }
 
 
@@ -370,9 +389,8 @@ footer.footer span a {
 }
 
 .form input[type=button], .form input[type=submit], .createdir input[type=submit] {
-	background: #F5F5F5;;
+	background: #F5F5F5;
 	color: #666;
-	/*text-shadow: 0 -1px 0 #222;*/
 	font-size: 15px;
 	font-family: 'Telex', sans-serif;
 }
@@ -380,12 +398,12 @@ footer.footer span a {
 div.parentdir {
 	width: 100%;
 	overflow:hidden;
-	margin: 1em 0 0.5em 0;
-	padding: 0.5em 0 0 0;
+	height: 1.5em;
+	margin: 0.1em 0 0.1em 0;
 }
 
 div.parentdir a {
-	padding: 0 0 0 1em;
+	padding: 0 0 1em 1em;
 	color: #666;
 	font-family: 'Telex';
 	clear: both;

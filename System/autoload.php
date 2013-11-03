@@ -9,11 +9,13 @@ function __autoload($class_name)
 	$file_name = str_replace('\\', '/', $class_name);
 
 	
-	$file = __DOC_ROOT.$file_name.'.class.php'; 
+	$file = __DOC_ROOT.$file_name.'.php'; 
 	
+		
 	if (!is_readable($file))
 	{
-		die ("Unable to load file");
+		echo "Unable to load file: ".$file;
+		exit(); 
 	}
 
 	include_once ($file);
