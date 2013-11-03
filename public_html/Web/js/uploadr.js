@@ -107,7 +107,7 @@ $( document ).ready( function() {
 		{
 			responseHandler( data, eventId );
 			
-			if (successFlag != files.length)
+			if (successFlag == files.length)
 			{
 				setInterval( function() { window.location = currentDir; }, 2000);
 			}
