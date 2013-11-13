@@ -81,10 +81,10 @@ class IndexController extends BaseController
 			else
 			{
 				$this->ErrorHandler->setErrors('Unable To Download: Non-Existant File');
+				$this->index();
 			}
 		}
 		
-		$this->index();
 	}
 	
 	
