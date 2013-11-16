@@ -59,7 +59,7 @@ class IndexController extends BaseController
 	
 	
 	public function download()
-    {
+        {
 		if (!empty($this->request['GET']['file']))
 		{
 			$file = $this->dir.urldecode($this->request['GET']['file']);
@@ -206,7 +206,8 @@ class IndexController extends BaseController
 		for ($i = 0; $i < count($dirsArray); $i++)
 		{
 			$name = htmlentities(str_replace(__UPLOAD_DIR, '', $dirsArray[$i]));
-			$displayName = basename($this->appendString($name, 40));
+			$displayName = basename($name);
+			$displayName = $this->appendString($displayName, 40);
 			$deleteName = basename($name);
 			
 			$this->dirsArray[] = [ 'name' => $name, 'displayName' => $displayName, 'deleteName' => $deleteName ];
