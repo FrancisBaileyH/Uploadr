@@ -188,7 +188,14 @@ class IndexController extends BaseController
 	{
 		if ($this->FileHandler->checkDir($this->dir))
 		{
-			if (!$this->FileHandler->fetchFiles($this->dir, '*'))
+			# Fetch Normal Files
+			# Fetch Hidden Files
+			# Check Results
+			$resNF = $this->FileHandler->fetchFiles($this->dir, '*');
+                        $resHF = $this->FileHandler->fetchFiles($this->dir, '.[A-Za-z0-9]*' );
+
+
+			if (!$resNF && !$resHF)
 			{
 				$this->ErrorHandler->setErrors('No Files In Directory');
 			}

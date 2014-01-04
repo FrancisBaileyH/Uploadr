@@ -32,15 +32,19 @@ section#fileform .inner {
 	margin: 0;
 }
 
-section#fileform .innerchild {
-	width: 94.25%;
-	height: 15em;
+section#fileform .innerchild, .loginpage {
+	width: 43.40em;
+	height: 20em;
 	margin: 0 auto;
 	border-left: 1px solid #888;
 	border-right: 1px solid #888;
 	border-bottom: 1px solid #888;
 	background: white;
 	overflow: auto;
+}
+
+section#fileform .loginpage {
+	height: 15em;
 }
 
 

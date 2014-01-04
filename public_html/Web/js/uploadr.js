@@ -19,6 +19,14 @@ function alertFile()
 	{
 		container.append( '<div class="fileSelect">' + file[i].name + '</div>' );
 		container.append( '<div class="progress" id="progid' + i + '"><div class="progressBar"></div></div>' );
+		
+		if ( i == 9 )
+		{
+			/*
+			 * based on max post size
+			*/
+			break;
+		}
 	}
 }
 

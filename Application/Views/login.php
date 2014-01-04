@@ -5,7 +5,7 @@
 					<strong class="ribbon-content">~ Uploadr ~</strong>
 				</h1>
 				</div>
-				<div class="innerchild">
+				<div class="loginpage">
 					<form class="login" action="index.php?route=auth/auth" method="POST">
 					<fieldset>
 						<legend></legend>
