@@ -7,11 +7,11 @@
 				</div>
 				<div class="innerchild">
 				<div class="form">
-				<form action="index.php?route=index/upload&amp;dir=<?= $uriDir; ?>" method="POST" enctype="multipart/form-data" id="uploadfile">
+				<form action="index.php?route=index/upload&amp;dir=<?php echo $uriDir; ?>" method="POST" enctype="multipart/form-data" id="uploadfile">
 				<fieldset>
 					<legend></legend>					
 					<div id="selectfile">
-						<input type="hidden" name="MAX_FILE_SIZE" value="<?= $maxsize; ?>" id="maxsize" />
+						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" id="maxsize" />
 						<input type="button" name="filebutton" value="Select File" id="filebutton" onclick="selectFile()"/>
 						<input type="file" id="file" name="files[]" onchange="alertFile()" multiple />
 					</div>
@@ -22,7 +22,7 @@
 				</form>
 				</div>
 				<div class="createdir">
-				<form action="index.php?route=index/createDir&amp;dir=<?= $uriDir ?>" method="POST" id="createdir">
+				<form action="index.php?route=index/createDir&amp;dir=<?php echo  $uriDir ?>" method="POST" id="createdir">
 				<fieldset>
 					<legend></legend>
 					<div id="typedir">
@@ -45,8 +45,8 @@
 					}
 				?>
 				</div>
-				<div type="hidden" id="currentdir" value="<?= 'index.php?dir='.$uriDir; ?>" ></div>
-				<div class="parentdir"><?= (!empty($prevdir) ? '<a href="index.php?dir='.$prevdir.'">Parent Directory</a>' : ''); ?></div> 
+				<div type="hidden" id="currentdir" value="<?php echo  'index.php?dir='.$uriDir; ?>" ></div>
+				<div class="parentdir"><?php echo  (!empty($prevdir) ? '<a href="index.php?dir='.$prevdir.'">Parent Directory</a>' : ''); ?></div> 
 				<div class="files"><?php
 								if (!empty($dirsArray))
 								{
