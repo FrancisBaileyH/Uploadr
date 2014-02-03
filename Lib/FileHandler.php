@@ -167,7 +167,7 @@ class FileHandler {
 	 * if yes removes file and repeats 
 	 * recursively
 	*/
-	public function rmDirRecursive($path)
+	public function rmDirRecursive($path, $preserve = false)
 	{
 		$contents = new \FilesystemIterator($path);
 		
@@ -183,7 +183,7 @@ class FileHandler {
 			}
 		}
 		
-		$this->rmDirectory($path);
+		if ( !$preserve ) @$this->rmDirectory($path);
 		
 	}
 

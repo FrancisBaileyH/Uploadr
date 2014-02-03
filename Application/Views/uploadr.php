@@ -56,12 +56,12 @@
 									{
 										echo '<ul id="dirs"><li><a href="index.php?dir='.$dirArray['name'].'">'.$dirArray['displayName'].'</a></li>'
 										     .'<li>&nbsp;</li><li><a>&nbsp;</a></li>'
-										     .'<li><form class="deleteform" action="index.php?route=index/delete" method="POST">'
+										     .'<li><form id="deleteDir" class="deleteform" action="index.php?route=index/delete" method="POST">'
 											 .'<input type="hidden" name="dir" value="'.$uriDir.'" />'
 											 .'<input type="hidden" name="file" value="'.$dirArray['name'].'" />'
 					                         .'<input type="hidden" name="csrf" value="'.$csrf.'" />'
 					                         .'<input type="hidden" name="type" value="dir" />'
-					                         .'<input type="submit" name="delete" value="X" onclick="promptRm()"/>'
+					                         .'<input type="submit" name="delete" value="X"/>'
 				                             .'</form></li></ul>';
 									}
 								}
@@ -71,7 +71,7 @@
 									{
 										echo '<ul><li title="'.$fileArray['name'].'">'.$fileArray['displayName'].'</li><li>'.$fileArray['size'].'</li>'
 										 	 .'<li><a href="index.php?route=index/download&amp;dir='.$uriDir.'&amp;file='.$fileArray['uriname'].'">D</a></li>'
-										 	 .'<li><form class="deleteform" action="index.php?route=index/delete" method="POST">'
+										 	 .'<li><form id="deleteFile" class="deleteform" action="index.php?route=index/delete" method="POST">'
 											 .'<input type="hidden" name="dir" value="'.$uriDir.'" />'
 											 .'<input type="hidden" name="file" value="'.$fileArray['uriname'].'" />'
 											 .'<input type="hidden" name="csrf" value="'.$csrf.'" />'
