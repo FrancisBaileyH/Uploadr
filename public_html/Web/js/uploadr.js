@@ -1,13 +1,10 @@
+
 function selectFile()
 {
 	$( "#file" ).click();
 }
 
 
-/*
- * Max Post Size Needs
- * To Be Taken Into Account
- */
 function alertFile()
 {
 	var file = $( "#file" )[0].files;
@@ -20,21 +17,20 @@ function alertFile()
 		container.append( '<div class="fileSelect">' + file[i].name + '</div>' );
 		container.append( '<div class="progress" id="progid' + i + '"><div class="progressBar"></div></div>' );
 		
-		if ( i == 9 )
+		if ( i == 4 )
 		{
 			/*
 			 * based on max post size
 			*/
+			container.append( '<p class="error">Maxiumum 5 uploads at at time</p>' );	
 			break;
 		}
 	}
 }
 
 
-
 function promptRm()
 {
-		
 	if (!confirm( "Are you sure you want to remove this directory and all files within it?" ))
 	{
 		return false;
@@ -45,6 +41,12 @@ function promptRm()
 
 $( document ).ready( function() {
 	
+	
+	$( function()
+	{
+		$( '.uploadform input[type=file]' ).css( 'display', 'none' );
+		$( '.uploadform input[type=button]' ).css( 'display', 'block' );
+	});
 	
 	
 	$( "#upload" ).on( "click", function( event ) {
@@ -58,6 +60,7 @@ $( document ).ready( function() {
 		var files = $( "#file" )[0].files;
 		var successFlag = 0;
 		var errorFlag = 0;
+		$( this ).prop( 'disabled', true );
 		
 		if (files.length < 1)
 		{
@@ -68,8 +71,9 @@ $( document ).ready( function() {
 			
 			if (file.size < maxsize)
 			{
-			
+	
 				formData.append(0, file );
+				formData.append(0, $( '#selectfile [name="csrf"]' ).val() );
 						
 				$.ajax({
 						url: uri,
@@ -104,11 +108,10 @@ $( document ).ready( function() {
 			}
 			else
 			{
-				$( "#progid" + i ).html( '<p class="uploadError">Maximum File Size Exceeded' );
+				$( "#progid" + i ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
 			}
 			
 		});
-		
 		
 		
 		function requestComplete( data, eventId )
@@ -123,11 +126,7 @@ $( document ).ready( function() {
 			{
 				setInterval( function() { window.location = currentDir; }, 4000 );
 			}
-			
-			
 		}
-		
-		
 		
 		
 		function responseHandler( data, eventId )
@@ -145,20 +144,15 @@ $( document ).ready( function() {
 			}
 		}
 		
-		
-		
-		
+			
 		function progressBar( percent, eventId )
 		{
 			var width = Math.ceil( 100 * percent ) + '%';
 		
 			$( '#progid' + eventId + " .progressBar" ).width( width );
 		}
-		
 										
 	});
-	
-	
 });
 
 

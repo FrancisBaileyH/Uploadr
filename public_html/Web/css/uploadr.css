@@ -83,7 +83,7 @@ form.login label {
 	width: 5em;
 }
 
-.form login input {
+.uploadform login input {
 }	
 
 form.login input[type=text], form.login input[type=password] {
@@ -194,19 +194,16 @@ div.files li:nth-child(4) a:hover {
 }
 	
 
-
-
 /*---------Upload and Select File Form---------*/
 
 
-
-.form {
+.uploadform {
 	width: 50%;
 	float: left;
 	margin: 0 0 0 0;
 }
 
-.form fieldset {
+.uploadform fieldset {
 	border: 0;
 	width: 100%;
 	position: relative;
@@ -214,40 +211,39 @@ div.files li:nth-child(4) a:hover {
 	padding: 0.75em 0 0 0;
 }
 
-.form input {
+.uploadform input {
 	height: 2.5em;
 	width: 7.91em;
 }
 
-.form input[type=file] {
-	height: 0;
-	width: 0;
-	overflow: hidden;
-}
-
-.form input[type=button] {
-	font-family: 'Oxygen';
-	background: white;
-}
-
-.form input[type=submit] {
+.uploadform input[type=file] {
 	
 }
 
-.form div {
+.uploadform input[type=button] {
+	font-family: 'Oxygen';
+	background: white;
+	display: none;
+}
+
+.uploadform input[type=submit] {
+	
+}
+
+.uploadform div {
 	float: left;
 	width: 35%;
 }
 
-.form div#selectfile {
+.uploadform div#selectfile {
 	padding: 0 0 0 2em;
 }
 
-.form div#submitfile {
+.uploadform div#submitfile {
 	padding: 0 0 0 4em;
 }
 
-.form input[type=button], input[type=submit] {
+.uploadform input[type=button], input[type=submit] {
 	border: 0;
 }
 
@@ -255,20 +251,18 @@ div.files li:nth-child(4) a:hover {
 
 /*---------Name and Create Directory Form---------*/
 
-
-
-
 .createdir {
 	width: 50%;
 	float: left;
 	margin: 0 0 0 0;
+	overflow: hidden;
 }
 
 .createdir fieldset {
 	border: 0;
 	position: relative;
 	width: 100%;
-	padding: 0.75em 0 0 0;
+	padding: 0.75em 0 0 3em;
 }
 
 .createdir input {
@@ -284,6 +278,7 @@ div.files li:nth-child(4) a:hover {
 	font-size: 13px;
 	background: white;
 	padding: 0.2em 1em 0 1em;
+	float: left;
 }
 
 .createdir div {
@@ -294,7 +289,7 @@ div.files li:nth-child(4) a:hover {
 
 .createdir div#seccreatedir {
 	padding: 0 0 0 0;
-	margin: 0 0 0 -4px;
+	float: left;
 }
 
 .createdir div#typedir {
@@ -388,11 +383,11 @@ footer.footer span a {
 
 
 
-.form input[type=button]:hover, .form input[type=submit]:hover, .createdir input[type=submit]:hover {
+.uploadform input[type=button]:hover, .uploadform input[type=submit]:hover, .createdir input[type=submit]:hover {
 	background: #EDEDED;
 }
 
-.form input[type=button], .form input[type=submit], .createdir input[type=submit] {
+.uploadform input[type=button], .uploadform input[type=submit], .createdir input[type=submit] {
 	background: #F5F5F5;
 	color: #666;
 	font-size: 15px;

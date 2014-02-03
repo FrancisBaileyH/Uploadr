@@ -12,7 +12,7 @@ class Router
 
 
 
-	private $allowed = [ 'index', 'auth'];
+	private $allowed = [ 'index', 'auth' ];
 	private $registry;
 	private $args = array();
 	public  $action;
@@ -24,10 +24,6 @@ class Router
 	public function __construct($registry)
 	{
 		$this->registry = $registry;
-		$this->request = new Request();
-		$this->request->setRequest($_GET, 'GET');
-		$this->request->setRequest($_POST, 'POST');
-		$this->request->setRequest($_FILES, 'FILES');
 	}
 
 	
@@ -37,12 +33,10 @@ class Router
 		$file = $this->getController();
 		$file = str_replace('\\', '/', $file);
 		$file = __DOC_ROOT.$file;
-		
 
 		$class = $this->controller.'Controller';
 		
-		$object = new $class($this->registry, $this->request->getRequest());
-
+		$object = new $class($this->registry);
 
 		if (!is_callable(array($object, $this->action)))
 		{

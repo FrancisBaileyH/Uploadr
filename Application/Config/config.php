@@ -24,8 +24,10 @@ $config['upload_dir'] = 'Uploads/';
 
 /*
 	Maximum file size allowed
+	Note: can't be larger than amount
+	      specified in php.ini
 */
-$config['max_file_size'] = 209715200;//ini_get('upload_max_file_size');
+$config['max_file_size'] = 2097152;
 
 
 
@@ -34,7 +36,7 @@ $config['max_file_size'] = 209715200;//ini_get('upload_max_file_size');
  * Maximum files to be uploaded @ a time
  * Should correspond with your php.ini
 */
-$config['max_num_files'] = 10;
+$config['max_num_files'] = ini_get('max_file_uploads');
 
 
 

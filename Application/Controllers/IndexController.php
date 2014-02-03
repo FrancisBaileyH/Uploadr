@@ -1,54 +1,43 @@
 <?php
 
 
-
-
 namespace Application\Controllers;
-
-
 
 
 use Lib;
 
 
-
-
 class IndexController extends BaseController
 {
-
-
-
 	private $FileHandler = NULL;
 	private $dirsArray  = array();
 	private $filesArray = array();
 	private $validFiles = array();
+	private $csrfValid = true;
 	private $dir;
-	
+		
 
-
-
-	public function __construct($registry, $request)
+	public function __construct($registry)
 	{
-		parent::__construct($registry, $request);
+		parent::__construct($registry);
 			
 		$this->FileHandler = new Lib\FileHandler();
 		$this->dir = $this->sanitizeDirname();
 	}
 
 
-		
 	public function index()
 	{
 		$this->fetchFiles();
-		$this->template->maxsize    = $this->registry->config['max_file_size'];
+		$this->template->maxsize    = $this->config['max_file_size'];
 		$this->template->dirsArray  = $this->sortDirsArray($this->FileHandler->getDirsArray());
 		$this->template->filesArray = $this->sortFilesArray($this->FileHandler->getFilesArray());
 		$this->template->errors     = $this->ErrorHandler->getAllErrors();
-		$this->template->uriDir     = empty($this->request['GET']['dir']) ? '' : $this->request['GET']['dir'];
-		$this->template->prevdir    = !empty($this->request['GET']['dir']) ? dirname($this->request['GET']['dir']) : '';
+		$this->template->uriDir     = empty($_GET['dir']) ? '' : $_GET['dir'];
+		$this->template->prevdir    = !empty($_GET['dir']) ? dirname($_GET['dir']) : '';
+		$this->template->csrf       = $this->CSRFProtect->getToken();
 		$this->template->render(['header', 'uploadr', 'footer']);
 	}
-
 
 	
 	public function notFound()
@@ -57,12 +46,17 @@ class IndexController extends BaseController
 	}
 	
 	
+	private function checkCSRF( $token )
+	{
+		return $this->CSRFProtect->isTokenValid( $token );
+	}
 	
+		
 	public function download()
         {
-		if (!empty($this->request['GET']['file']))
+		if (!empty($_GET['file']))
 		{
-			$file = $this->dir.urldecode($this->request['GET']['file']);
+			$file = $this->dir.urldecode($_GET['file']);
 			
 			if ($this->FileHandler->checkFile($file))
 			{
@@ -88,14 +82,18 @@ class IndexController extends BaseController
 	}
 	
 	
-	
-	private function validateCreateDir($dirname)
+	private function validateCreateDir($input)
 	{
 		$flag = true; 
 		
-		if (!empty($dirname))
+		if ( empty( $input['csrf'] ) || !$this->checkCSRF( $input['csrf'] ) )
 		{
-			$dirname = basename($dirname);
+			$flag = false;
+			$this->ErrorHandler->setErrors( "Invalid CSRF token, refresh the page and try again" );
+		}
+		else if (!empty($input['dirname']))
+		{
+			$dirname = basename($input['dirname']);
 			
 			if (preg_match('/^[\w-]+$/', $dirname))
 			{
@@ -127,12 +125,11 @@ class IndexController extends BaseController
 	}
 	
 	
-	
 	public function createDir()
 	{
-		if ($this->validateCreateDir($this->request['POST']['dirname']))
+		if ($this->validateCreateDir($_POST))
 		{
-			if (!$this->FileHandler->createDir($this->dir, basename($this->request['POST']['dirname']), 0700))
+			if (!$this->FileHandler->createDir($this->dir, basename($_POST['dirname']), 0700))
 			{
 				$this->ErrorHandler->setErrors('Unable To Create Directory At This Time');
 			}
@@ -142,15 +139,14 @@ class IndexController extends BaseController
 		$this->index();
 	}
 
-
 	
-	public function deleteDir()
+	public function deleteDir( $file )
 	{
-		if ($this->FileHandler->checkDir($this->dir.$this->request['GET']['name']))
+		if ($this->FileHandler->checkDir($this->dir.$file))
 		{
-			$this->FileHandler->rmDirRecursive($this->dir.$this->request['GET']['name']);
+			$this->FileHandler->rmDirRecursive($this->dir.$file);
 			
-			if ($this->FileHandler->checkDir($this->dir.$this->request['GET']['name']))
+			if ($this->FileHandler->checkDir($this->dir.$file))
 			{
 				$this->ErrorHandler->setErrors('Unable To Remove Directory At This Time');
 			}
@@ -159,30 +155,49 @@ class IndexController extends BaseController
 		{
 			$this->ErrorHandler->setErrors('Unable To Remove Directory: Non-Existant Directory');
 		}
-		
-		$this->index();
+
 	}
-	
 	
 	
 	public function delete()
 	{
-		if ($this->FileHandler->checkFile($this->dir.$this->request['GET']['file']))
+		if ( empty( $_POST['csrf'] ) || !$this->checkCSRF( $_POST['csrf'] ) )
 		{
-			if (!$this->FileHandler->rmFile($this->dir.urldecode($this->request['GET']['file'])))
-			{
-				$this->ErrorHandler->setErrors('Unable To Remove File At This Time');
-			}
+			$this->ErrorHandler->setErrors( "Invalid CSRF token, refresh the page and try again" );
 		}
 		else
 		{
-			$this->ErrorHandler->setErrors('Unable To Remove: Non-Existant File');
+			if (!empty($_POST['type']))
+			{
+				$file = empty($_POST['file']) ? '' : $_POST['file']; 
+				$file = urldecode($file);	
+	
+			
+				if ($_POST['type'] == 'file')
+				{
+					if ($this->FileHandler->checkFile($this->dir.$file))
+					{
+						if (!$this->FileHandler->rmFile($this->dir.$file))
+						{
+							$this->ErrorHandler->setErrors('Unable To Remove File At This Time');
+						}
+					}
+					else
+					{
+						$this->ErrorHandler->setErrors('Unable To Remove: Non-Existant File');
+					}
+		
+				}
+				else
+				{
+					$this->deleteDir( $file );
+				}
+			}
 		}
 		
 		$this->index();
 	}
-	
-	
+		
 	
 	private function fetchFiles()
 	{
@@ -206,8 +221,7 @@ class IndexController extends BaseController
 		}
 	}
 	
-	
-	
+		
 	private function sortDirsArray($dirsArray = array())
 	{
 		for ($i = 0; $i < count($dirsArray); $i++)
@@ -222,8 +236,7 @@ class IndexController extends BaseController
 		
 		return $this->dirsArray;
 	}
-	
-	
+		
 	
 	private function sortFilesArray($filesArray = array())
 	{
@@ -239,9 +252,7 @@ class IndexController extends BaseController
 		
 		return $this->filesArray;
 	}
-	
-	
-			
+				
 	
 	private function appendString($string, $strlen = 30)
 	{
@@ -259,30 +270,26 @@ class IndexController extends BaseController
 		}
 	}
 	
-	
-	
-	
+		
 	private function sanitizeDirname()
 	{
-		$dir = empty($this->request['GET']['dir']) ? __UPLOAD_DIR : __UPLOAD_DIR.urldecode($this->request['GET']['dir']);
+		$dir = empty($_GET['dir']) ? __UPLOAD_DIR : __UPLOAD_DIR.urldecode($_GET['dir']);
 		$dir = !strstr(substr($dir, -1) , '/') ? $dir.'/' : $dir;
 		$dir = str_replace('../', '', $dir);
 				
 		return $dir;
 	}
 			
-			
-	
+		
 	public function upload()
 	{
-			
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest')
 		{
 			$this->ajaxUpload();
 		}	
 		else
 		{
-			$this->validateUpload($this->request, $this->dir);
+	  	   $this->validateUpload($_FILES, $_POST, $this->dir);
 		
 			if (!empty($this->validFiles[0]))
 			{
@@ -290,39 +297,33 @@ class IndexController extends BaseController
 						
 				do
 				{
-					
 					if (!$this->FileHandler->uploadFile($this->validFiles[$i]['tmp_name'], $this->dir.$this->validFiles[$i]['name']))
 					{
 						$this->ErrorHandler->setErrors('Error: Unable to Upload '.$this->validFiles[$i]['name']);
 					}	
 								
 					$i++;
-				
 				}
-				while ($i < count($this->validFiles));
-				
+				while ($i < count($this->validFiles) && $i < $this->registry['config']['max_file_uploads']);
 			}
-		
 			$this->index();
-		
 		}
-		
 	}
-	
-	
-	
+		
 	
 	private function ajaxUpload()
 	{
-		
-		if (!empty($_FILES[0]))
+		if ( empty( $_POST[0]) || !$this->checkCSRF( $_POST[0] ) )
 		{
-			
+			$response[] = "Invalid CSRF token, refresh the page and try again";
+		}
+		else if (!empty($_FILES[0]))
+		{
 			if ($this->FileHandler->checkFile($this->dir.$_FILES[0]['name']))
 			{
 				$response[] = "File Exists In Directory";
-			}
-			if ($_FILES[0]['size'] > $this->registry->config['max_file_size'])
+			}	
+			if ($_FILES[0]['size'] > $this->config['max_file_size'])
 			{
 				$response[] = "File Exceeds Maximum Upload Size";
 			}
@@ -336,8 +337,8 @@ class IndexController extends BaseController
 				{
 					$response[] = 1;
 				}
-			}
 			
+			}
 		}
 		else
 		{
@@ -351,9 +352,13 @@ class IndexController extends BaseController
 	
 
 
-	private function validateUpload($request, $dir)
+	private function validateUpload($request, $post, $dir)
 	{
-		if (!empty($request['FILES']['files']['name'][0]))
+		if (empty( $post['csrf'] ) || !$this->checkCSRF( $post['csrf'] ))
+		{
+			$this->ErrorHandler->setErrors( "Invalid CSRF token, refresh the page and try again" );
+		}
+		else if (!empty($request['FILES']['files']['name'][0]))
 		{
 			$files = $request['FILES']['files'];
 			
@@ -361,7 +366,7 @@ class IndexController extends BaseController
 			{
 				$flag = true;
 				
-				if ($files['size'][$i] > $this->registry->config['max_file_size'])
+				if ($files['size'][$i] > $this->config['max_file_size'])
 				{
 					$this->ErrorHandler->setErrors("Max File Size Exceeded On: ".$files['name'][$i]);
 					$flag = false;
@@ -384,14 +389,8 @@ class IndexController extends BaseController
 		}	
 	
 	}
-	
-	
-		
-	
+
 }
-
-
-
 
 
 ?>

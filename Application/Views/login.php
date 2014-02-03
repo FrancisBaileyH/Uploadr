@@ -27,6 +27,7 @@
 							<label>Password</label><input type="password" name="password" />
 						</div>
 						<div>
+							<input type="hidden" name="csrf" value="<?php echo $csrf; ?>" />
 							<input type="submit" name="submit" value="login" />
 						</div>
 					</fieldset>

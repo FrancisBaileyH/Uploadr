@@ -1,21 +1,14 @@
 <?php
 
 
-
 namespace Application\Controllers;
 
 
-
-
-class AuthController extends BaseController {
-
-
-
+class AuthController extends BaseController 
+{
 
 	private $password = '*';
 	private $username = '*';
-	
-	
 
 
 	public function index()
@@ -24,11 +17,11 @@ class AuthController extends BaseController {
 		{
 			header('location: index.php');
 		}
+		$this->template->csrf   = $this->CSRFProtect->getToken();
 		$this->template->errors = $this->ErrorHandler->getAllErrors();
 		$this->template->render(['header', 'login', 'footer']);
 	}
-
-
+	
 	
 	public function auth()
 	{
@@ -36,7 +29,7 @@ class AuthController extends BaseController {
 		{
 			if (empty($_SESSION['ATTEMPTS']) || $_SESSION['ATTEMPTS'] < 6)
 			{
-				if ($this->request['POST']['username'] !== $this->username || $this->request['POST']['password'] !== $this->password)
+				if ($_POST['username'] !== $this->username || $_POST['password'] !== $this->password)
 				{
 					$this->ErrorHandler->setErrors('Invalid Username/Password');
 					$_SESSION['ATTEMPTS'] = (empty($_SESSION['ATTEMPTS']) ? 1 : $_SESSION['ATTEMPTS'] + 1);
@@ -57,29 +50,32 @@ class AuthController extends BaseController {
 	}
 
 
-
 	public function logout()
 	{
 		if (!empty($_SESSION['AUTH']))
 		{
 			$_SESSION = array();
 			unset($_SESSION);
+			
+			header( 'location: /');
 		}
 
 		$this->index();
 	}
 
 
-
-
-
 	private function validateForm()
 	{
-		if (isset($this->request['POST']['submit']))
+		if (isset($_POST['submit']))
 		{
-			$flag = true;
+			$flag = true;	
 			
-			if (empty($this->request['POST']['username']) || empty($this->request['POST']['password']))
+			if ( empty( $_POST['csrf'] ) || !$this->CSRFProtect->isTokenValid( $_POST['csrf'] ) )
+			{
+				$this->ErrorHandler->setErrors( "Invalid CSRF token, refresh the page and try again" );
+				$flag = false;
+			} 
+			else if (empty($_POST['username']) || empty($_POST['password']))
 			{
 				$this->ErrorHandler->setErrors('Missing Field');
 				$flag = false;
