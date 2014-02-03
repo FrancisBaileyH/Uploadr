@@ -3,8 +3,7 @@
 session_start();
 
 
-define('__SITE_PATH', dirname(realpath(__FILE__)));
-define('__DOC_ROOT', '/home/kattenmedia/UploadrDemo/');
+define('__DOC_ROOT', '/path/to/docroot/');
 
 
 include(__DOC_ROOT.'System/autoload.php');
