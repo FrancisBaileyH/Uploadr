@@ -29,18 +29,17 @@ function alertFile()
 }
 
 
-function promptRm()
-{
-	if (!confirm( "Are you sure you want to remove this directory and all files within it?" ))
-	{
-		return false;
-	}
-}
-
-
-
 $( document ).ready( function() {
-	
+
+
+	$( '#deleteDir' ).submit( function( e )
+	{
+		if (!confirm( "Are you sure you want to remove this directory and all files within it?" ))
+		{
+			e.preventDefault();
+		}
+	});
+
 	
 	$( function()
 	{
