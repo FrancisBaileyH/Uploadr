@@ -53,8 +53,6 @@ section#fileform .loginpage {
 /*---------Login Form---------*/
 
 
-
-
 form.login {
 	width: 100%;
 	overflow: hidden;
@@ -82,9 +80,6 @@ form.login label {
 	text-align: right;
 	width: 5em;
 }
-
-.uploadform login input {
-}	
 
 form.login input[type=text], form.login input[type=password] {
 	width: 10em;
@@ -131,8 +126,6 @@ form.login p.error {
 /*---------Listing Of Directory Contents---------*/
 
 
-
-
 div.files ul {
 	overflow: hidden;
 	border-bottom: 1px solid #888;
@@ -164,6 +157,8 @@ div.files li a, .deleteform input[type=submit] {
 	color: black;
 	font-family: 'Telex', sans-serif;
 	font-size: 15px;
+	background: inherit;
+	cursor: pointer;
 }
 
 div.files li:first-child {
@@ -188,7 +183,7 @@ div.files li:nth-child(3) a:hover {
 	text-shadow: 0 -1px 0 #008B00;
 }
 
-div.files .deleteform input[type=text]:hover {
+div.files .deleteform input[type=submit]:hover {
 	color: #CD0000;
 	text-shadow: 0 -1px 0 #8B0000;
 }
@@ -250,7 +245,8 @@ div.files .deleteform input[type=text]:hover {
 
 
 /*---------Name and Create Directory Form---------*/
-
+ 
+ 
 .createdir {
 	width: 50%;
 	float: left;
@@ -350,8 +346,6 @@ div.msg-container p.uploadError {
 /*---------Section Footer---------*/
 
 
-
-
 footer.footer {
 	width: 100%;
 	clear: both;
@@ -379,8 +373,6 @@ footer.footer span a {
 
 
 /*---------Misc---------*/
-
-
 
 
 .uploadform input[type=button]:hover, .uploadform input[type=submit]:hover, .createdir input[type=submit]:hover {
@@ -414,8 +406,6 @@ div.parentdir a {
 
 
 /*---------Ribbon Design---------*/
-
-
 
 
 .ribbon {
