@@ -159,7 +159,7 @@ div.files li {
 	font-size: 15px;
 }
 
-div.files li a {
+div.files li a, .deleteform input[type=submit] {
 	text-decoration: none;
 	color: black;
 	font-family: 'Telex', sans-serif;
@@ -188,7 +188,7 @@ div.files li:nth-child(3) a:hover {
 	text-shadow: 0 -1px 0 #008B00;
 }
 
-div.files li:nth-child(4) a:hover {
+div.files .deleteform input[type=text]:hover {
 	color: #CD0000;
 	text-shadow: 0 -1px 0 #8B0000;
 }
