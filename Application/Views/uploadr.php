@@ -12,7 +12,7 @@
 					<legend></legend>					
 					<div id="selectfile">
 						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" id="maxsize" />
-						<input type="button" name="filebutton" value="Select File" id="filebutton" onclick="selectFile()"/>
+						<input type="button" name="filebutton" value="Select File" id="filebutton" />
 						<input type="file" id="file" name="files[]" multiple />
 						<input type="hidden" name="csrf" value="<?php echo $csrf; ?>" />
 					</div>

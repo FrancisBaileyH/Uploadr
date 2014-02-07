@@ -64,6 +64,7 @@ $( document ).ready( function()
         var uri = $( "#uploadfile" ).attr( "action" );
         var currentDir = $( "#currentdir" ).attr( "value" );
         var files = $( "#file" )[0].files;
+        var maxsize = $( "#maxsize" ).val();
         var successFlag = 0;
         var errorFlag = 0;
         
