@@ -13,7 +13,7 @@
 					<div id="selectfile">
 						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" id="maxsize" />
 						<input type="button" name="filebutton" value="Select File" id="filebutton" onclick="selectFile()"/>
-						<input type="file" id="file" name="files[]" onchange="alertFile()" multiple />
+						<input type="file" id="file" name="files[]" multiple />
 						<input type="hidden" name="csrf" value="<?php echo $csrf; ?>" />
 					</div>
 					<div id="submitfile">
@@ -56,8 +56,7 @@
 									{
 										echo '<ul id="dirs"><li><a href="index.php?dir='.$dirArray['name'].'">'.$dirArray['displayName'].'</a></li>'
 										     .'<li>&nbsp;</li><li><a>&nbsp;</a></li>'
-										     .'<li><form id="deleteDir" class="deleteform" action="index.php?route=index/delete" method="POST">'
-											 .'<input type="hidden" name="dir" value="'.$uriDir.'" />'
+										     .'<li><form class="deleteform deleteDir" action="index.php?route=index/delete&amp;dir='.$uriDir.'" method="POST">'
 											 .'<input type="hidden" name="file" value="'.$dirArray['name'].'" />'
 					                         .'<input type="hidden" name="csrf" value="'.$csrf.'" />'
 					                         .'<input type="hidden" name="type" value="dir" />'
@@ -71,8 +70,7 @@
 									{
 										echo '<ul><li title="'.$fileArray['name'].'">'.$fileArray['displayName'].'</li><li>'.$fileArray['size'].'</li>'
 										 	 .'<li><a href="index.php?route=index/download&amp;dir='.$uriDir.'&amp;file='.$fileArray['uriname'].'">D</a></li>'
-										 	 .'<li><form id="deleteFile" class="deleteform" action="index.php?route=index/delete" method="POST">'
-											 .'<input type="hidden" name="dir" value="'.$uriDir.'" />'
+										 	 .'<li><form class="deleteform" action="index.php?route=index/delete&amp;dir='.$uriDir.'" method="POST">'
 											 .'<input type="hidden" name="file" value="'.$fileArray['uriname'].'" />'
 											 .'<input type="hidden" name="csrf" value="'.$csrf.'" />'
 											 .'<input type="hidden" name="type" value="file" />'

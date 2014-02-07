@@ -17,7 +17,7 @@ $config = array();
 /*
 	Directory all files are to be uploaded to
 */
-$config['upload_dir'] = 'Uploads/';
+$config['upload_dir'] = __DOC_ROOT . 'Uploads/';
 
 
 

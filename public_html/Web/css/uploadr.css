@@ -301,9 +301,6 @@ div.files .deleteform input[type=submit]:hover {
 
 /*---------Msg Container---------*/
 
-
-
-
 div.msg-container {
 	width: 98%;
 	overflow: hidden;
@@ -324,12 +321,11 @@ div.msg-container div.fileSelect {
 div.msg-container div.progress {
 	width: 100%;
 	background: white;
-	margin: 0.2em 0 0 1em ;
+	margin: 0.2em 2em 0 2em;
 }
 
 div.msg-container div.progressBar { 
 	width: 0;
-	margin: 0 1em 0 1.2em;
 	height: 3px;
 	background: #BDBDBD;
 }

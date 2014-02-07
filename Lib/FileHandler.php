@@ -94,7 +94,7 @@ class FileHandler {
 	
 	
 	
-	public function createDir($targetPath, $dirname, $perms = 0700)
+	public function createDir($targetPath, $dirname, $perms = 0600)
 	{
 		return mkdir($targetPath.$dirname, $perms);
 	}
@@ -153,8 +153,14 @@ class FileHandler {
 	public function bytesToSize($bytes, $precision = 2)
 	{
 		$unit = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB' ];
-			
-		return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision). ' '.$unit[$i];
+
+		if ( $bytes > 0 )
+		{
+			return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $precision). ' '.$unit[$i];
+		}
+		
+		return $bytes . 'B';
+				
 	}
 	
 	

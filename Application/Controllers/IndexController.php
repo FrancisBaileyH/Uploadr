@@ -22,7 +22,7 @@ class IndexController extends BaseController
 		parent::__construct($registry);
 			
 		$this->FileHandler = new Lib\FileHandler();
-		$this->dir = $this->sanitizeDirname();
+		$this->dir = $this->sanitizeDirname( empty( $_GET['dir'] ) ? '' : $_GET['dir'] );
 	}
 
 
@@ -53,7 +53,7 @@ class IndexController extends BaseController
 	
 		
 	public function download()
-        {
+    {
 		if (!empty($_GET['file']))
 		{
 			$file = $this->dir.urldecode($_GET['file']);
@@ -82,6 +82,10 @@ class IndexController extends BaseController
 	}
 	
 	
+	/*
+	 * Validate the create directory form
+	 * return false if any criteria is not met
+	*/ 
 	private function validateCreateDir($input)
 	{
 		$flag = true; 
@@ -102,7 +106,7 @@ class IndexController extends BaseController
 					$this->ErrorHandler->setErrors('Directory Exists Already');
 					$flag = false;
 				}
-				if (strlen($dirname) > 60 )
+				if (strlen($dirname) > 60)
 				{
 					$this->ErrorHandler->setErrors('Maximum 60 Characters Allowed');
 					$flag = false;
@@ -125,6 +129,9 @@ class IndexController extends BaseController
 	}
 	
 	
+	/*
+	 * Create directory function
+	*/ 
 	public function createDir()
 	{
 		if ($this->validateCreateDir($_POST))
@@ -140,7 +147,11 @@ class IndexController extends BaseController
 	}
 
 	
-	public function deleteDir( $file )
+	/*
+	 * Delete entire directory including any
+	 * sub directories and files within it
+	*/ 
+	private function deleteDir( $file )
 	{
 		if ($this->FileHandler->checkDir($this->dir.$file))
 		{
@@ -159,6 +170,11 @@ class IndexController extends BaseController
 	}
 	
 	
+	/*
+	 * Checks if delete type is for file or directory
+	 * If it's a file it's handled directly in the function
+	 * else it calls deleteDir()
+	*/
 	public function delete()
 	{
 		if ( empty( $_POST['csrf'] ) || !$this->checkCSRF( $_POST['csrf'] ) )
@@ -169,10 +185,9 @@ class IndexController extends BaseController
 		{
 			if (!empty($_POST['type']))
 			{
-				$file = empty($_POST['file']) ? '' : $_POST['file']; 
-				$file = urldecode($file);	
-	
-			
+				$file = empty($_POST['file']) ? '' : urldecode( $_POST['file'] ); 
+				$file = basename( $file );
+							
 				if ($_POST['type'] == 'file')
 				{
 					if ($this->FileHandler->checkFile($this->dir.$file))
@@ -199,6 +214,10 @@ class IndexController extends BaseController
 	}
 		
 	
+	/*
+	 * Fetches all files from specified directory
+	 * files are stored in array in FileHandler object
+	*/ 
 	private function fetchFiles()
 	{
 		if ($this->FileHandler->checkDir($this->dir))
@@ -207,7 +226,7 @@ class IndexController extends BaseController
 			# Fetch Hidden Files
 			# Check Results
 			$resNF = $this->FileHandler->fetchFiles($this->dir, '*');
-                        $resHF = $this->FileHandler->fetchFiles($this->dir, '.[A-Za-z0-9]*' );
+            $resHF = $this->FileHandler->fetchFiles($this->dir, '.[A-Za-z0-9]*' );
 
 
 			if (!$resNF && !$resHF)
@@ -221,7 +240,11 @@ class IndexController extends BaseController
 		}
 	}
 	
-		
+	
+	/*
+	 * Fetches directories from FileHandler object 
+	 * and prepares them for display to client
+	*/ 
 	private function sortDirsArray($dirsArray = array())
 	{
 		for ($i = 0; $i < count($dirsArray); $i++)
@@ -237,7 +260,10 @@ class IndexController extends BaseController
 		return $this->dirsArray;
 	}
 		
-	
+	/*
+	 * Fetches files from FileHandler object
+	 * and prepares them for display to client
+	*/ 
 	private function sortFilesArray($filesArray = array())
 	{
 		for ($i = 0; $i < count($filesArray); $i++)
@@ -254,6 +280,9 @@ class IndexController extends BaseController
 	}
 				
 	
+	/*
+	 * If file name is too long, shorten it to display nicely
+	*/ 
 	private function appendString($string, $strlen = 30)
 	{
 		if (is_string($string))
@@ -270,17 +299,41 @@ class IndexController extends BaseController
 		}
 	}
 	
-		
-	private function sanitizeDirname()
+	
+	
+	private function sanitizeFilename( $file )
 	{
-		$dir = empty($_GET['dir']) ? __UPLOAD_DIR : __UPLOAD_DIR.urldecode($_GET['dir']);
-		$dir = !strstr(substr($dir, -1) , '/') ? $dir.'/' : $dir;
-		$dir = str_replace('../', '', $dir);
+		$file = str_replace( '../', '', $file );
+	}
+	
+	
+	
+	/*
+	 * Cleans up directory name from $_GET
+	 * Ensures directory traversal cannot occur
+	*/ 	
+	private function sanitizeDirname( $dir = null )
+	{
+		if ( empty( $dir ) )
+		{
+			$cleanDir = __UPLOAD_DIR;
+		}
+		else
+		{
+			$cleanDir = str_replace('../', '', $dir);
+			$cleanDir = trim( $cleanDir, '.' );
+			$cleanDir = __UPLOAD_DIR.urldecode( $cleanDir );
+		    $cleanDir = !strstr(substr($cleanDir, -1) , '/') ? $cleanDir.'/' : $cleanDir;
+		}
 				
-		return $dir;
+		return $cleanDir;
 	}
 			
-		
+	
+	/*
+	 * Checks if ajax request and calls appropriate function
+	 * else deals with files directly
+	*/ 	
 	public function upload()
 	{
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest')
@@ -319,13 +372,15 @@ class IndexController extends BaseController
 		}
 		else if (!empty($_FILES[0]))
 		{
+			$_FILES[0]['name'] = basename( $_FILES[0]['name'] );
+			
 			if ($this->FileHandler->checkFile($this->dir.$_FILES[0]['name']))
 			{
 				$response[] = "File Exists In Directory";
 			}	
 			if ($_FILES[0]['size'] > $this->config['max_file_size'])
 			{
-				$response[] = "File Exceeds Maximum Upload Size";
+				$response[] = "File Exceeds Maximum Upload Size of " . $this->FileHandler->bytesToSize( $this->config['max_file_size'] );
 			}
 			if (empty($response))
 			{
@@ -365,13 +420,14 @@ class IndexController extends BaseController
 			for ($i = 0; $i < count($files['name']); $i++)
 			{
 				$flag = true;
+				$files['name'][$i] = basename( $files['name'][$i] );
 				
 				if ($files['size'][$i] > $this->config['max_file_size'])
 				{
-					$this->ErrorHandler->setErrors("Max File Size Exceeded On: ".$files['name'][$i]);
+					$this->ErrorHandler->setErrors("Max File Size Exceeded of ".$this->FileHandler->bytesToSize( $this->config['max_file_size'] ). " On: ".$files['name'][$i]);
 					$flag = false;
 				}
-				if ($this->FileHandler->checkFile($this->dir.$files['name']))
+				if ($this->FileHandler->checkFile($dir.$files['name'][$i]))
 				{
 					$this->ErrorHandler->setErrors("File Exists in Directory");
 					$flag = false;

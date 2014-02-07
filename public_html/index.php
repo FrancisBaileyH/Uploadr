@@ -1,16 +1,17 @@
 <?php
 
+
 session_start();
 
 
-define('__DOC_ROOT', '/path/to/docroot/');
+define('__DOC_ROOT', '/path/to/Uploadr/');
 
 
 include(__DOC_ROOT.'System/autoload.php');
 include(__DOC_ROOT.'Application/Config/config.php');
 
 
-define('__UPLOAD_DIR', __DOC_ROOT.$config['upload_dir']);
+define('__UPLOAD_DIR', $config['upload_dir']);
 
 
 $registry = new System\Registry();
