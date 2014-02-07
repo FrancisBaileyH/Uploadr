@@ -63,7 +63,6 @@ $( document ).ready( function()
         var formData = new FormData();
         var uri = $( "#uploadfile" ).attr( "action" );
         var currentDir = $( "#currentdir" ).attr( "value" );
-        var maxsize = $( "#maxsize" ).attr( "value" );
         var files = $( "#file" )[0].files;
         var successFlag = 0;
         var errorFlag = 0;
@@ -172,39 +171,41 @@ $( document ).ready( function()
         }
         
         
+
+    
+    
+        function checkFileSize( file, id )
+        {
+            if ( file.size >= maxsize )
+            {
+                $( "#progid" + id ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
+                return false;
+            }
+            
+            return true;
+        }
+        
+        
+        function checkFileLength( file )
+        {
+            if ( file.length < 1 )
+            {   
+                $( '.msg-container' ).html( '<p class="error">Please Select a File To Upload</p>' );
+            }
+        }
+            
+        
+        /*
+        * Generate progress bar 
+        */  
+        function progressBar( percent, eventId )
+        {
+            var width = Math.ceil( 100 * percent ) + '%';
+        
+            $( '#progid' + eventId + " .progressBar" ).width( width );
+        }
+    
     });
-    
-    
-    function checkFileSize( file, id )
-    {
-        if ( file.size >= maxsize )
-        {
-            $( "#progid" + id ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
-            return false;
-        }
-            
-        return true;
-    }
-        
-        
-    function checkFileLength( file )
-    {
-        if ( file.length < 1 )
-        {
-            $( '.msg-container' ).html( '<p class="error">Please Select a File To Upload</p>' );
-        }
-    }
-            
-        
-    /*
-    * Generate progress bar 
-    */  
-    function progressBar( percent, eventId )
-    {
-        var width = Math.ceil( 100 * percent ) + '%';
-    
-        $( '#progid' + eventId + " .progressBar" ).width( width );
-    }
 
 });
 
