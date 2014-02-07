@@ -1,6 +1,7 @@
 About
 =====================================
-Uploadr is a simple AJAX/PHP file uploader.  I made it as a simple application for personal use and practice.
+Uploadr is a simple AJAX/PHP file uploader.  I made it as an application for personal use and practice.
+You can view a live demo over at http://demo.francisbailey.com
 
 Installation
 =====================================
@@ -13,7 +14,7 @@ From there you'll need to change the document root in index.php
     session_start();
 
     /*
-      * Simply change /path/to/app to the appliaction direcory
+      * Simply change /path/to/app to the application direcory
       * I.e. /home/user/Uploadr/
     */
     define('__DOC_ROOT', '/path/to/app/');
