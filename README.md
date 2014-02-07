@@ -16,7 +16,7 @@ From there you'll need to change the document root in index.php
       * Simply change /path/to/app to the appliaction direcory
       * I.e. /home/user/Uploadr/
     */
-    define('__DOC_ROOT', '/home/kattenmedia/UploadrDemo/');
+    define('__DOC_ROOT', '/path/to/app/');
 
 
     include(__DOC_ROOT.'System/autoload.php');
