@@ -1,38 +1,39 @@
-
-function selectFile()
+$( document ).ready( function() 
 {
-    $( "#file" ).click();
-}
-
-
-function alertFile()
-{
-    var file = $( "#file" )[0].files;
-    var container = $( ".msg-container" );
     
-    container.html('');
+    var MAX_NUM_FILES = 5;
     
-    for (var i = 0; i < file.length; i++)
+    
+    $( '#filebutton' ).click( function()
     {
-        container.append( '<div class="fileSelect">' + file[i].name + '</div>' );
-        container.append( '<div class="progress" id="progid' + i + '"><div class="progressBar"></div></div>' );
+        $( '#file' ).click();
+    });
         
-        if ( i == 5 )
+    
+    $( '#file' ).on( 'change', function()
+    {
+        var file = $( "#file" )[0].files;
+        var container = $( ".msg-container" );
+    
+        container.html('');
+    
+        for (var i = 0; i < file.length; i++)
         {
-            /*
-             * based on max post size
-            */
-            container.append( '<p class="error">Maxiumum 5 uploads at at time</p>' );   
-            break;
+            container.append( '<div class="fileSelect">' + file[i].name + '</div>' );
+            container.append( '<div class="progress" id="progid' + i + '"><div class="progressBar"></div></div>' );
+        
+            if ( i == MAX_NUM_FILES - 1 )
+            {
+                // based on max post size
+                container.append( '<p class="error">Maxiumum 5 uploads at at time</p>' );   
+                break;
+            }
         }
-    }
-}
+    });
+    
 
 
-$( document ).ready( function() {
-
-
-    $( '#deleteDir' ).submit( function( e )
+    $( '.deleteDir' ).submit( function( e )
     {
         if (!confirm( "Are you sure you want to remove this directory and all files within it?" ))
         {
@@ -40,8 +41,7 @@ $( document ).ready( function() {
         }
     });
 
-    
-    
+        
     /*
      * If javascript is disabled display the default
      * file select button
@@ -52,8 +52,7 @@ $( document ).ready( function() {
         $( '.uploadform input[type=button]' ).css( 'display', 'block' );
     });
     
-    
-    
+        
     /*
      * Upload files function
     */ 
@@ -72,43 +71,43 @@ $( document ).ready( function() {
         //Disable upload button
         $( this ).prop( 'disabled', true );
         
-        
-        if (files.length < 1)
-        {
-            $( '.msg-container' ).html( '<p class="error">Please Select a File To Upload</p>' );
-        }
-        
-        
+        //Ensure there are files to upload
+        checkFileLength( files );
+      
+    
         /*
          * Loop through each file and send a seperate request
          * Track files individually and handle response
          * with functions below
         */ 
-        $.each( files, function( i, file ) {
+        $.each( files, function( i, file ) 
+        {
             
-            if (file.size < maxsize)
+            if ( i == MAX_NUM_FILES )
+            {
+                return false;
+            }
+            if ( checkFileSize( file, i ) )
             {
     
                 formData.append(0, file );
                 formData.append(0, $( '#selectfile [name="csrf"]' ).val() );
-                        
+     
                 $.ajax({
                         url: uri,
                         type: 'POST',
                         dataType: 'json',
                         data: formData,
-                        error: function( data ) { 
-                                    errorFlag++;
-                                    requestComplete( data, i );
-                            },
-                        xhr: function() {
+                        xhr: 
+                            function() 
+                            {
                                 var xhr = new window.XMLHttpRequest();
                             
-                                xhr.upload.addEventListener("progress", function( evt ) {
+                                xhr.upload.addEventListener("progress", function( evt ) 
+                                {
                                     if (evt.lengthComputable) 
                                     {
                                         var percentComplete = evt.loaded / evt.total;
-                                    
                                         progressBar( percentComplete, i );
                                     }
                                 }, false);
@@ -117,38 +116,35 @@ $( document ).ready( function() {
                             },
                         cache: false,
                         contentType: false,
-                        processData: false,
-                        success:function( data ) 
-                                { 
-                                    successFlag++;
-                                    requestComplete( data, i );
-                                }   
+                        processData: false
+                })
+                .always( function( data )
+                {
+                    requestComplete( data, i );
                 });
             }
             else
             {
-                $( "#progid" + i ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
+                errorFlag++;
             }
-            
-            //Re-enable upload button
-            $( this ).prop( 'disabled', false );
-                            
+                           
         });
         
-    
         /*
-        * Only reload page once every request
-        * has either completed or failed
+         * Only reload page once every request
+         * has either completed or failed
         */ 
-        function requestComplete( data, eventId )
+        function requestComplete( data, eventId, flag )
         {
-            responseHandler( data, eventId );
+            responseHandler( data, eventId, flag );
             
-            if (successFlag == files.length)
+            var numFiles = ( files.length < MAX_NUM_FILES ? files.length : MAX_NUM_FILES );
+            
+            if ( successFlag == numFiles )
             {
                 setInterval( function() { window.location = currentDir; }, 2000);
             }
-            else if (successFlag + errorFlag == files.length)
+            else if ( successFlag + errorFlag == numFiles )
             {
                 setInterval( function() { window.location = currentDir; }, 4000 );
             }
@@ -156,35 +152,59 @@ $( document ).ready( function() {
     
     
         /*
-        * Once response is received, if errors occurred
-        * append them to message container
-        * Otherwise simulate 100% completion of progress bar
+         * Once response is received, if errors occurred
+         * append them to message container
+         * Otherwise simulate 100% completion of progress bar
         */ 
         function responseHandler( data, eventId )
         {
             if ( data == 1)
             {
+                successFlag++;
                 progressBar( 1, eventId );
                 $( '#progid' + eventId + " .progressBar").css( "background-color", "#87c8fd");
             }
             else
-            {
+            {   
+                errorFlag++;
                 $( '#progid' + eventId ).html( '<p class="uploadError">' + data + '</p>' );
             }
         }
-    
-    
-        /*
-        * Generate progress bar 
-        */  
-        function progressBar( percent, eventId )
-        {
-            var width = Math.ceil( 100 * percent ) + '%';
-    
-            $( '#progid' + eventId + " .progressBar" ).width( width );
-        }
-
+        
+        
     });
+    
+    
+    function checkFileSize( file, id )
+    {
+        if ( file.size >= maxsize )
+        {
+            $( "#progid" + id ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
+            return false;
+        }
+            
+        return true;
+    }
+        
+        
+    function checkFileLength( file )
+    {
+        if ( file.length < 1 )
+        {
+            $( '.msg-container' ).html( '<p class="error">Please Select a File To Upload</p>' );
+        }
+    }
+            
+        
+    /*
+    * Generate progress bar 
+    */  
+    function progressBar( percent, eventId )
+    {
+        var width = Math.ceil( 100 * percent ) + '%';
+    
+        $( '#progid' + eventId + " .progressBar" ).width( width );
+    }
 
 });
 

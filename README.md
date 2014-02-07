@@ -5,15 +5,16 @@ Uploadr is a simple AJAX/PHP file uploader.  I made it as a simple application f
 Installation
 =====================================
 Installation is fairly simple.  You can just download the application and point your web root to public_html.  
-
 From there you'll need to change the document root in index.php
+
     /* Index.php */
     <?php
 
     session_start();
 
-    /*Simply change /path/to/app to the appliaction direcory
-      *I.e. /home/user/Uploadr/
+    /*
+      * Simply change /path/to/app to the appliaction direcory
+      * I.e. /home/user/Uploadr/
     */
     define('__DOC_ROOT', '/home/kattenmedia/UploadrDemo/');
 
