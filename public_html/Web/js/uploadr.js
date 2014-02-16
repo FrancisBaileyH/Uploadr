@@ -70,6 +70,7 @@ $( document ).ready( function()
         
         //Disable upload button
         $( this ).prop( 'disabled', true );
+        $( '#filebutton' ).prop( 'disabled', true );
         
         //Ensure there are files to upload
         checkFileLength( files );
@@ -129,6 +130,11 @@ $( document ).ready( function()
             }
                            
         });
+        
+        // Renable button
+        $( '#upload' ).prop( 'disabled', false );
+         $( '#filebutton' ).prop( 'disabled', false );
+        
         
         /*
          * Only reload page once every request
