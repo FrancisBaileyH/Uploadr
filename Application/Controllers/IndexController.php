@@ -97,7 +97,6 @@ class IndexController extends BaseController
 		}
 		else if (!empty($input['dirname']))
 		{
-			$dirname = basename($input['dirname']);
 			
 			if (preg_match('/^[\w-]+$/', $dirname))
 			{
