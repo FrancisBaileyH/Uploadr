@@ -1,7 +1,8 @@
 $( document ).ready( function() 
 {
     
-    var MAX_NUM_FILES = 5;
+    var MAX_NUM_FILES = $( '#maxnum' ).val();
+    var MAX_FILE_SIZE = $( '#maxsize' ).val();
     
     
     $( '#filebutton' ).click( function()
@@ -12,8 +13,8 @@ $( document ).ready( function()
     
     $( '#file' ).on( 'change', function()
     {
-        var file = $( "#file" )[0].files;
-        var container = $( ".msg-container" );
+        var file = $( '#file' )[0].files;
+        var container = $( '.msg-container' );
     
         container.html('');
     
@@ -25,7 +26,7 @@ $( document ).ready( function()
             if ( i == MAX_NUM_FILES - 1 )
             {
                 // based on max post size
-                container.append( '<p class="error">Maxiumum 5 uploads at at time</p>' );   
+                container.append( '<p class="error">Maxiumum ' + MAX_NUM_FILES + ' uploads at at time</p>' );   
                 break;
             }
         }
@@ -56,15 +57,14 @@ $( document ).ready( function()
     /*
      * Upload files function
     */ 
-    $( "#upload" ).on( "click", function( event ) {
+    $( '#upload' ).on( 'click', function( event ) {
         
         event.preventDefault();
                 
         var formData = new FormData();
-        var uri = $( "#uploadfile" ).attr( "action" );
-        var currentDir = $( "#currentdir" ).attr( "value" );
-        var files = $( "#file" )[0].files;
-        var maxsize = $( "#maxsize" ).val();
+        var uri = $( '#uploadfile' ).attr( 'action' );
+        var currentDir = $( '#currentdir' ).attr( 'value' );
+        var files = $( '#file' )[0].files;
         var successFlag = 0;
         var errorFlag = 0;
         
@@ -133,7 +133,7 @@ $( document ).ready( function()
         
         // Renable button
         $( '#upload' ).prop( 'disabled', false );
-         $( '#filebutton' ).prop( 'disabled', false );
+        $( '#filebutton' ).prop( 'disabled', false );
         
         
         /*
@@ -168,7 +168,7 @@ $( document ).ready( function()
             {
                 successFlag++;
                 progressBar( 1, eventId );
-                $( '#progid' + eventId + " .progressBar").css( "background-color", "#87c8fd");
+                $( '#progid' + eventId + ' .progressBar').css( 'background-color', '#87c8fd');
             }
             else
             {   
@@ -183,9 +183,9 @@ $( document ).ready( function()
     
         function checkFileSize( file, id )
         {
-            if ( file.size >= maxsize )
+            if ( file.size >= MAX_FILE_SIZE )
             {
-                $( "#progid" + id ).html( '<p class="uploadError">Maximum File Size Exceeded</p>' );
+                $( '#progid' + id ).html( '<p class="uploadError">Maximum File Size of ' + MAX_FILE_SIZE + ' Exceeded</p>' );
                 return false;
             }
             
@@ -209,7 +209,7 @@ $( document ).ready( function()
         {
             var width = Math.ceil( 100 * percent ) + '%';
         
-            $( '#progid' + eventId + " .progressBar" ).width( width );
+            $( '#progid' + eventId + ' .progressBar' ).width( width );
         }
     
     });

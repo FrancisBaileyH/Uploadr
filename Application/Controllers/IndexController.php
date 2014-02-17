@@ -23,12 +23,14 @@ class IndexController extends BaseController
 			
 		$this->FileHandler = new Lib\FileHandler();
 		$this->dir = $this->sanitizeDirname( empty( $_GET['dir'] ) ? '' : $_GET['dir'] );
+		$this->config['max_file_size'] = $this->FileHandler->returnBytes( $this->config['max_file_size'] );
 	}
 
-
+	
 	public function index()
 	{
 		$this->fetchFiles();
+		$this->template->maxnum     = $this->config['max_num_files'];
 		$this->template->maxsize    = $this->config['max_file_size'];
 		$this->template->dirsArray  = $this->sortDirsArray($this->FileHandler->getDirsArray());
 		$this->template->filesArray = $this->sortFilesArray($this->FileHandler->getFilesArray());

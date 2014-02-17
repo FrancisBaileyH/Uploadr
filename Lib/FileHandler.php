@@ -160,7 +160,29 @@ class FileHandler {
 		}
 		
 		return $bytes . 'B';
-				
+	}
+	
+	
+	
+	public function returnBytes( $val ) 
+	{
+		$val = trim($val);
+		$last = strtolower( substr( $val, -1 ) );
+		
+		switch( $last ) 
+		{
+			case 'g':
+				$val *= 1024 * 1024 * 1024;
+				break;
+			case 'm':
+				$val *= 1024 * 1024;
+				break;
+			case 'k':
+				$val *= 1024;
+				break;
+		}	
+
+		return $val;
 	}
 	
 	

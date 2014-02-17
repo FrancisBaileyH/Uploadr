@@ -11,6 +11,7 @@
 				<fieldset>
 					<legend></legend>					
 					<div id="selectfile">
+						<input type="hidden" name="MAX_FILE_NUM" value="<?php echo $maxnum; ?>" id="maxnum" />
 						<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" id="maxsize" />
 						<input type="button" name="filebutton" value="Select File" id="filebutton" />
 						<input type="file" id="file" name="files[]" multiple />
