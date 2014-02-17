@@ -27,7 +27,7 @@ $config['upload_dir'] = __DOC_ROOT . 'Uploads/';
 	Note: can't be larger than amount
 	      specified in php.ini
 */
-$config['max_file_size'] = 2097152;
+$config['max_file_size'] = (int)(ini_get('upload_max_filesize'));
 
 
 
