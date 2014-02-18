@@ -55,7 +55,7 @@ class IndexController extends BaseController
 	
 		
 	public function download()
-    {
+        {
 		if (!empty($_GET['file']))
 		{
 			$file = $this->dir.urldecode($_GET['file']);
@@ -99,6 +99,7 @@ class IndexController extends BaseController
 		}
 		else if (!empty($input['dirname']))
 		{
+			$dirname = $input['dirname'];
 			
 			if (preg_match('/^[\w-]+$/', $dirname))
 			{
