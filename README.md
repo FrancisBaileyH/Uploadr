@@ -44,7 +44,3 @@ TroubleShooting
 You need to make sure the Uploads directory, or whichever directory you choose to store your uploads, has sufficient
 permissions to write and read files.
 
-*Note
-==============================================
-I made this application before I truly understood the importance of unit tests.
-As such, there are no unit tests. Use this app at your own discretion.  
